@@ -6,13 +6,17 @@ import GameOver from "./components/GameOver";
 import HelpSlider from "./components/HelpSlider";
 import MessageBox from "./components/MessageBox";
 import WinMessage from "./components/WinMessage";
+import Login from "./pages/Login";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
+
   const [word, setWord] = useState("");
   const [gameStatus, setGameStatus] = useState("playing"); // 'playing', 'win', 'lose'
   const [showHelp, setShowHelp] = useState(false);
   const [message, setMessage] = useState("");
   const [gameMode, setGameMode] = useState(null);
+  const [resultSent, setResultSent] = useState(false);
 
   const fetchWord = async (mode) => {
     const url =
@@ -26,24 +30,44 @@ function App() {
   };
 
   const handleModeSelect = (mode) => {
+    setResultSent(false);
     setGameMode(mode);
     fetchWord(mode);
   };
 
-  const fetchRandomWord = async () => {
-    const response = await fetch("http://localhost:5000/api/word");
-    const data = await response.json();
-    setWord(data.word);
-    console.log(data.word);
+  // const fetchRandomWord = async () => {
+  //   const response = await fetch("http://localhost:5000/api/word");
+  //   const data = await response.json();
+  //   setWord(data.word);
+  //   console.log(data.word);
+  // };
+
+  const reportGameResult = async (won) => {
+    if (resultSent) return;
+    setResultSent(true);
+    const token = localStorage.getItem("token");
+
+    await fetch("http://localhost:5000/api/game/result", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        mode: gameMode,
+        won: won,
+      }),
+    });
   };
 
   const handleGameOver = () => {
     setGameStatus("lose");
+    reportGameResult(false);
   };
 
   const handleWin = () => {
     setGameStatus("win");
-    // reportGameResult(true);
+    reportGameResult(true);
   };
 
   const handleHelpClick = () => {
@@ -54,6 +78,10 @@ function App() {
     setMessage(msg);
     setTimeout(() => setMessage(""), 2000);
   };
+
+  if (!loggedIn) {
+    return <Login onLogin={() => setLoggedIn(true)} />;
+  }
 
   if (!gameMode) {
     return (
