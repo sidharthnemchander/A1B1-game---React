@@ -24,19 +24,7 @@ function App() {
     const data = await response.json();
     setWord(data.word);
   };
-  // const reportGameResult = async (won) => {
-  //   await fetch("http://localhost:5000/api/game/result", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       mode: gameMode,
-  //       won,
-  //       attemptsUsed: 1,
-  //       maxAttempts: 10,
-  //       word,
-  //     }),
-  //   });
-  // };
+
   const handleModeSelect = (mode) => {
     setGameMode(mode);
     fetchWord(mode);
