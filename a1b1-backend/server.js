@@ -6,6 +6,7 @@ const words = require("./words.json");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require("./middleware/auth");
 const dbURI = process.env.dbURI;
 const User = require("./models/User");
 const GameResult = require("./models/GameResult");
@@ -69,7 +70,7 @@ app.get("/api/test-db", async (req, res) => {
   res.send("User saved");
 });
 
-app.post("/api/game/result", async (req, res) => {
+app.post("/api/game/result", authMiddleware, async (req, res) => {
   try {
     const { mode, won, attemptsUsed, maxAttempts, word } = req.body;
 
@@ -82,11 +83,9 @@ app.post("/api/game/result", async (req, res) => {
     }
 
     //  Get or create user
-    let user = await User.findOne({ username: "testuser" });
-
+    const user = await User.findById(req.userId);
     if (!user) {
-      user = new User({ username: "testuser" });
-      await user.save();
+      return res.status(404).json({ error: "User not found" });
     }
 
     const today = getTodayString();
@@ -223,6 +222,32 @@ app.post("/api/auth/login", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.get("/api/debug/register", async (req, res) => {
+  try {
+    const username = "sid";
+    const password = "123456";
+
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await require("bcryptjs").hash(password, 10);
+
+    const user = new User({
+      username,
+      password: hashedPassword,
+    });
+
+    await user.save();
+
+    res.json({ message: "Debug user registered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Debug register failed" });
   }
 });
 
