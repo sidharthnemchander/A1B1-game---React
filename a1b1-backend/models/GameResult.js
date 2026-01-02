@@ -36,7 +36,7 @@ const gameResultSchema = new mongoose.Schema(
 
     date: {
       type: String, // "YYYY-MM-DD"
-      required: true,
+      required: false,
     },
   },
   { timestamps: true }

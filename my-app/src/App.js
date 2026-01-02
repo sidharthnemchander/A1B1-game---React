@@ -33,6 +33,7 @@ function App() {
     setResultSent(false);
     setGameMode(mode);
     fetchWord(mode);
+    setResultSent(false);
   };
 
   // const fetchRandomWord = async () => {
@@ -44,10 +45,10 @@ function App() {
 
   const reportGameResult = async (won) => {
     if (resultSent) return;
-    setResultSent(true);
+
     const token = localStorage.getItem("token");
 
-    await fetch("http://localhost:5000/api/game/result", {
+    const res = await fetch("http://localhost:5000/api/game/result", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,9 +56,23 @@ function App() {
       },
       body: JSON.stringify({
         mode: gameMode,
-        won: won,
+        won,
+        word: word,
+        attemptsUsed: 1,
+        maxAttempts: 10,
       }),
     });
+    if (res.status === 401) {
+      console.error("Unauthorized – token invalid or expired");
+      return;
+    }
+
+    if (!res.ok) {
+      console.error("Game result failed");
+      return;
+    }
+
+    setResultSent(true);
   };
 
   const handleGameOver = () => {
