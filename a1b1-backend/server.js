@@ -55,6 +55,24 @@ app.get("/api/word/daily", (req, res) => {
   });
 });
 
+app.get("/api/game/daily-status", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const today = getTodayString();
+
+    const played = user.lastPlayedDate === today && user.dailyGamesPlayed >= 1;
+
+    res.json({ played });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.get("/api/word/random", (req, res) => {
   const randomIndex = Math.floor(Math.random() * words.length);
   const randomWord = words[randomIndex];

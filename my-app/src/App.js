@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Board from "./components/Board";
 import Dash from "./components/Dash";
@@ -6,8 +6,8 @@ import GameOver from "./components/GameOver";
 import HelpSlider from "./components/HelpSlider";
 import MessageBox from "./components/MessageBox";
 import WinMessage from "./components/WinMessage";
+import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
-
 function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
 
@@ -17,6 +17,8 @@ function App() {
   const [message, setMessage] = useState("");
   const [gameMode, setGameMode] = useState(null);
   const [resultSent, setResultSent] = useState(false);
+  const [dailyPlayed, setDailyPlayed] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   const fetchWord = async (mode) => {
     const url =
@@ -28,6 +30,11 @@ function App() {
     const data = await response.json();
     setWord(data.word);
   };
+  useEffect(() => {
+    if (loggedIn) {
+      fetchDailyStatus();
+    }
+  }, [loggedIn]);
 
   const handleModeSelect = (mode) => {
     setResultSent(false);
@@ -62,6 +69,7 @@ function App() {
         maxAttempts: 10,
       }),
     });
+    const data = await res.json();
     if (res.status === 401) {
       console.error("Unauthorized – token invalid or expired");
       return;
@@ -69,10 +77,24 @@ function App() {
 
     if (!res.ok) {
       console.error("Game result failed");
+      showMessage(data.error);
       return;
     }
 
     setResultSent(true);
+  };
+
+  const fetchDailyStatus = async () => {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("http://localhost:5000/api/game/daily-status", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    setDailyPlayed(data.played);
   };
 
   const handleGameOver = () => {
@@ -97,6 +119,16 @@ function App() {
   if (!loggedIn) {
     return <Login onLogin={() => setLoggedIn(true)} />;
   }
+  if (showLeaderboard) {
+    return (
+      <div className="App">
+        <button onClick={() => setShowLeaderboard(false)}>
+          ← Back to Game
+        </button>
+        <Leaderboard />
+      </div>
+    );
+  }
 
   if (!gameMode) {
     return (
@@ -104,11 +136,18 @@ function App() {
         <h1 id="title">The A1B1 Game</h1>
         <p>Select a mode to start</p>
 
-        <button onClick={() => handleModeSelect("daily")}>
+        <button disable={dailyPlayed} onClick={() => handleModeSelect("daily")}>
           Daily Challenge
         </button>
+        {dailyPlayed && (
+          <p style={{ color: "red" }}>
+            You have already played today’s daily challenge.
+          </p>
+        )}
 
         <button onClick={() => handleModeSelect("random")}>Free Play</button>
+        <button onClick={() => setShowLeaderboard(false)}>Game</button>
+        <button onClick={() => setShowLeaderboard(true)}>Leaderboard</button>
       </div>
     );
   }
