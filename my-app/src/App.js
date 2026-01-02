@@ -50,7 +50,7 @@ function App() {
   //   console.log(data.word);
   // };
 
-  const reportGameResult = async (won) => {
+  const reportGameResult = async (won, attemptsUsed) => {
     if (resultSent) return;
 
     const token = localStorage.getItem("token");
@@ -65,7 +65,7 @@ function App() {
         mode: gameMode,
         won,
         word: word,
-        attemptsUsed: 1,
+        attemptsUsed,
         maxAttempts: 10,
       }),
     });
@@ -97,14 +97,14 @@ function App() {
     setDailyPlayed(data.played);
   };
 
-  const handleGameOver = () => {
+  const handleGameOver = (attemptsUsed) => {
     setGameStatus("lose");
-    reportGameResult(false);
+    reportGameResult(true, attemptsUsed);
   };
 
-  const handleWin = () => {
+  const handleWin = (attemptsUsed) => {
     setGameStatus("win");
-    reportGameResult(true);
+    reportGameResult(true, attemptsUsed);
   };
 
   const handleHelpClick = () => {
@@ -146,7 +146,6 @@ function App() {
         )}
 
         <button onClick={() => handleModeSelect("random")}>Free Play</button>
-        <button onClick={() => setShowLeaderboard(false)}>Game</button>
         <button onClick={() => setShowLeaderboard(true)}>Leaderboard</button>
       </div>
     );
