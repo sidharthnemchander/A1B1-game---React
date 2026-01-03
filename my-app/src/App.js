@@ -140,7 +140,11 @@ function App() {
   if (showLeaderboard) {
     return (
       <div className="App">
-        <button onClick={() => setShowLeaderboard(false)}>
+        <button
+          className="leaderboard-link"
+          style={{ bottom: "auto", top: "20px" }}
+          onClick={() => setShowLeaderboard(false)}
+        >
           ← Back to Game
         </button>
         <Leaderboard />
@@ -150,34 +154,60 @@ function App() {
 
   if (!gameMode) {
     return (
-      <div className="App">
-        <h1 id="title">The A1B1 Game</h1>
-        <button
-          style={{ float: "right" }}
-          onClick={() => {
-            localStorage.removeItem("token");
-            setLoggedIn(false);
-            setGameMode(null);
-          }}
-        >
-          Logout
-        </button>
-        <p>Select a mode to start</p>
+      <div className="mode-selection">
+        <h1 className="main-title">THE A1B1 GAME</h1>
 
-        <button
-          disabled={dailyPlayed}
-          onClick={() => handleModeSelect("daily")}
+        {/* Daily Challenge - Left Panel */}
+        <div
+          className={`mode-panel left ${dailyPlayed ? "disabled" : ""}`}
+          onClick={() => !dailyPlayed && handleModeSelect("daily")}
         >
-          Daily Challenge
-        </button>
-        {dailyPlayed && (
-          <p style={{ color: "red" }}>
-            You have already played today’s daily challenge.
-          </p>
-        )}
+          <div className="mode-content">
+            <p className="mode-title">Ranked</p>
+            <button className="mode-button" disabled={dailyPlayed}>
+              DAILY CHALLENGE
+            </button>
+            {dailyPlayed && (
+              <p className="daily-played-msg">Already played today</p>
+            )}
+          </div>
+        </div>
 
-        <button onClick={() => handleModeSelect("random")}>Free Play</button>
-        <button onClick={() => setShowLeaderboard(true)}>Leaderboard</button>
+        <div className="lightning-crack"></div>
+
+        {/* Free Play - Right Panel */}
+        <div
+          className="mode-panel right"
+          onClick={() => handleModeSelect("random")}
+        >
+          <div className="mode-content">
+            <p className="mode-title">Practice</p>
+            <button className="mode-button">FREE PLAY</button>
+
+            <div className="auth-buttons">
+              <button
+                className="auth-mode-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLeaderboard(true);
+                }}
+              >
+                Leaderboard
+              </button>
+
+              <button
+                className="logout-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  localStorage.removeItem("token");
+                  setLoggedIn(false);
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

@@ -25,32 +25,42 @@ function Login({ onLogin, goToRegister }) {
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-
-      <input
-        className="auth-input"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
-      />
-
-      <input
-        className="auth-input"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-
-      <button onClick={handleLogin} className="auth-button">
-        Login
-      </button>
-      <button className="auth-button" onClick={goToRegister}>
-        Create Account
-      </button>
-
-      <p className="auth-message">{error}</p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Login</h2>
+        <p className="auth-subtitle">
+          Welcome back! Please enter your details.
+        </p>
+        <div className="auth-form">
+          <div className="auth-input-group">
+            <label className="auth-input-label">Username</label>
+            <input
+              className="auth-input"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+            />
+          </div>
+          <div className="auth-input-group">
+            <label className="auth-input-label">Password</label>
+            <input
+              className="auth-input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+            />
+          </div>
+          <button onClick={handleLogin} className="auth-button">
+            Login
+          </button>
+          <div className="auth-switch">
+            Don't have an account?{" "}
+            <button onClick={goToRegister}>Create Account</button>
+          </div>
+          {error && <p className="auth-message">{error}</p>}
+        </div>
+      </div>
     </div>
   );
 }
