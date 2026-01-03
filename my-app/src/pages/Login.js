@@ -16,6 +16,7 @@ function Login({ onLogin, goToRegister }) {
 
     if (!res.ok) {
       setError(data.message || "Login failed");
+      console.error("Login failed:", data.error);
       return;
     }
 

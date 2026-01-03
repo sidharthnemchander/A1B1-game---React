@@ -56,7 +56,7 @@ const Board = ({ word, onGameOver, onWin, showMessage }) => {
       setRowHints(newRowHints);
 
       if (hint.includes(`A5`)) {
-        onWin();
+        onWin(currentRow + 1);
       } else {
         setCurrentRow(currentRow + 1);
         setCurrentCol(0);

@@ -171,6 +171,7 @@ app.post("/api/game/result", authMiddleware, async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
+  console.log("GAME RESULT BODY:", req.body);
 });
 
 app.get("/api/leaderboard/daily", async (req, res) => {
