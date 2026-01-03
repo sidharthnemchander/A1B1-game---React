@@ -152,6 +152,16 @@ function App() {
     return (
       <div className="App">
         <h1 id="title">The A1B1 Game</h1>
+        <button
+          style={{ float: "right" }}
+          onClick={() => {
+            localStorage.removeItem("token");
+            setLoggedIn(false);
+            setGameMode(null);
+          }}
+        >
+          Logout
+        </button>
         <p>Select a mode to start</p>
 
         <button
@@ -175,16 +185,6 @@ function App() {
   return (
     <div className="App">
       <h1 id="title">The A1B1 Game</h1>
-      <button
-        style={{ float: "right" }}
-        onClick={() => {
-          localStorage.removeItem("token");
-          setLoggedIn(false);
-          setGameMode(null);
-        }}
-      >
-        Logout
-      </button>
 
       <p style={{ textAlign: "center" }}>
         Mode: {gameMode === "daily" ? "Daily Challenge" : "Free Play"}

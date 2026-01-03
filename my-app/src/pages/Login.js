@@ -29,22 +29,28 @@ function Login({ onLogin, goToRegister }) {
       <h2>Login</h2>
 
       <input
+        className="auth-input"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
       />
 
       <input
+        className="auth-input"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
       />
 
-      <button onClick={handleLogin}>Login</button>
-      <button onClick={goToRegister}>Create Account</button>
+      <button onClick={handleLogin} className="auth-button">
+        Login
+      </button>
+      <button className="auth-button" onClick={goToRegister}>
+        Create Account
+      </button>
 
-      <p>{error}</p>
+      <p className="auth-message">{error}</p>
     </div>
   );
 }

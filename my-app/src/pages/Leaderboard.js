@@ -25,15 +25,15 @@ function Leaderboard() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="leaderboard-container">
       <h2>🏆 Daily Leaderboard</h2>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {leaders.length === 0 ? (
-        <p>No games played today.</p>
+        <p className="leaderboard-empty">No games played today.</p>
       ) : (
-        <table border="1" cellPadding="8">
+        <table className="leaderboard-table">
           <thead>
             <tr>
               <th>#</th>

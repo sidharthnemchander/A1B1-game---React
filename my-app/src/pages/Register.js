@@ -26,10 +26,11 @@ function Register({ onRegister, goToLogin }) {
   };
 
   return (
-    <div style={{ padding: "40px" }}>
+    <div className="auth-container">
       <h2>Register</h2>
 
       <input
+        className="auth-input"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -39,6 +40,7 @@ function Register({ onRegister, goToLogin }) {
       <br />
 
       <input
+        className="auth-input"
         type="password"
         placeholder="Password"
         value={password}
@@ -48,14 +50,18 @@ function Register({ onRegister, goToLogin }) {
       <br />
       <br />
 
-      <button onClick={handleRegister}>Register</button>
+      <button className="auth-button" onClick={handleRegister}>
+        Register
+      </button>
 
       <br />
       <br />
 
-      <button onClick={goToLogin}>Back to Login</button>
+      <button className="auth-button" onClick={goToLogin}>
+        Back to Login
+      </button>
 
-      <p>{message}</p>
+      <p className="auth-message">{message}</p>
     </div>
   );
 }
