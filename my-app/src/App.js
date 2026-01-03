@@ -8,6 +8,8 @@ import MessageBox from "./components/MessageBox";
 import WinMessage from "./components/WinMessage";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
 
@@ -19,6 +21,7 @@ function App() {
   const [resultSent, setResultSent] = useState(false);
   const [dailyPlayed, setDailyPlayed] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   const fetchWord = async (mode) => {
     const url =
@@ -99,7 +102,7 @@ function App() {
 
   const handleGameOver = (attemptsUsed) => {
     setGameStatus("lose");
-    reportGameResult(true, attemptsUsed);
+    reportGameResult(false, attemptsUsed);
   };
 
   const handleWin = (attemptsUsed) => {
@@ -117,8 +120,23 @@ function App() {
   };
 
   if (!loggedIn) {
-    return <Login onLogin={() => setLoggedIn(true)} />;
+    if (showRegister) {
+      return (
+        <Register
+          onRegister={() => setShowRegister(false)}
+          goToLogin={() => setShowRegister(false)}
+        />
+      );
+    }
+
+    return (
+      <Login
+        onLogin={() => setLoggedIn(true)}
+        goToRegister={() => setShowRegister(true)}
+      />
+    );
   }
+
   if (showLeaderboard) {
     return (
       <div className="App">
