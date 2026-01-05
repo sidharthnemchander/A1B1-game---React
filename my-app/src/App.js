@@ -46,13 +46,6 @@ function App() {
     setResultSent(false);
   };
 
-  // const fetchRandomWord = async () => {
-  //   const response = await fetch("http://localhost:5000/api/word");
-  //   const data = await response.json();
-  //   setWord(data.word);
-  //   console.log(data.word);
-  // };
-
   const reportGameResult = async (won, attemptsUsed) => {
     if (resultSent) return;
 
@@ -164,7 +157,7 @@ function App() {
         >
           <div className="mode-content">
             <p className="mode-title">Ranked</p>
-            <button className="mode-button" disabled={dailyPlayed}>
+            <button className="mode-button-daily" disabled={dailyPlayed}>
               DAILY CHALLENGE
             </button>
             {dailyPlayed && (
