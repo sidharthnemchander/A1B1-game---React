@@ -207,9 +207,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1 id="title">The A1B1 Game</h1>
+      <h1 id="title">The A1B1 GAME</h1>
 
-      <p style={{ textAlign: "center" }}>
+      <p className="mode-badge">
         Mode: {gameMode === "daily" ? "Daily Challenge" : "Free Play"}
       </p>
 

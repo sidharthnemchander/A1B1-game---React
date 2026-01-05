@@ -1,5 +1,5 @@
 /* =========================================
-   1. GLOBAL RESET & WARM DARK THEME
+1. GLOBAL RESET & WARM DARK THEME
    ========================================= */
 :root {
   --bg-color: #202123; /* ChatGPT-like warm dark */
@@ -39,6 +39,61 @@ body {
   min-height: 100vh;
   position: relative;
   width: 100%;
+}
+/* =========================================
+   TEXT & TITLES
+   ========================================= */
+
+/* 1. The Big Split-Screen Title */
+.main-title {
+  position: absolute;
+  top: 15%; /* Moved slightly down */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+
+  font-family: "Segoe UI", sans-serif; /* Clean, bold font */
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: 4px; /* Wide cinematic spacing */
+  text-transform: uppercase;
+  color: var(--text-main);
+
+  /* A double shadow to make it pop off the background */
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.8), 0 0 2px rgba(255, 255, 255, 0.1);
+
+  pointer-events: none; /* Let clicks pass through to the crack */
+  white-space: nowrap;
+}
+
+/* 2. The In-Game Title (Top of Board) */
+#title {
+  margin: 30px 0 10px 0;
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: "Papyrus", cursive;
+  color: rgb(65, 173, 203);
+
+  filter: drop-shadow(0 0 5px rgba(57, 160, 183, 0.3));
+}
+
+/* 3. The Mode Indicator (The <p> tag) */
+.mode-badge {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 16px;
+  border-radius: 20px;
+  display: inline-block; /* Wraps tight around text */
+  margin-bottom: 20px;
 }
 
 /* =========================================
@@ -466,7 +521,7 @@ body {
   position: fixed;
   top: 80px;
   left: 0; /* Starts at left edge */
-  background-color: rgba(220, 38, 38, 0.7); /* Red */
+  background-color: rgba(225, 68, 68, 0.9); /* Red */
   backdrop-filter: blur(5px);
   color: white;
   padding: 15px 30px;
