@@ -1030,3 +1030,20 @@ body {
     opacity: 1;
   }
 }
+.play-again-button {
+  margin-top: 100px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background: transparent;
+  color: #22c55e;
+  border: 2px solid #22c55e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.play-again-button:hover {
+  background: #22c55e;
+  color: #000;
+}

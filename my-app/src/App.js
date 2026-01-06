@@ -13,7 +13,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
 
   const [word, setWord] = useState("");
-  const [gameStatus, setGameStatus] = useState("playing"); // 'playing', 'win', 'lose'
+  const [gameStatus, setGameStatus] = useState("playing");
   const [showHelp, setShowHelp] = useState(false);
   const [message, setMessage] = useState("");
   const [gameMode, setGameMode] = useState(null);
@@ -21,7 +21,7 @@ function App() {
   const [dailyPlayed, setDailyPlayed] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
+  const [boardKey, setBoardKey] = useState(0);
 
   const fetchWord = async (mode) => {
     const url =
@@ -46,8 +46,17 @@ function App() {
     setResultSent(false);
   };
 
+  const playAgain = () => {
+    setGameStatus("playing");
+    setResultSent(false);
+    setBoardKey((k) => k + 1);
+    fetchWord("random");
+  };
+
   const reportGameResult = async (won, attemptsUsed) => {
     if (resultSent) return;
+
+    if (gameMode !== "daily") return;
 
     const token = localStorage.getItem("token");
 
@@ -136,7 +145,6 @@ function App() {
         }}
         goToRegister={() => {
           setShowLogin(false);
-          setShowRegister(true);
         }}
       />
     );
@@ -234,6 +242,7 @@ function App() {
         word={word}
         onGameOver={handleGameOver}
         onWin={handleWin}
+        key={boardKey}
         showMessage={showMessage}
       />
       {gameStatus === "lose" && <GameOver word={word} gameover={true} />}
@@ -243,6 +252,11 @@ function App() {
         ?
       </button>
       {showHelp && <HelpSlider />}
+      {gameMode === "random" && gameStatus !== "playing" && (
+        <button className="play-again-button" onClick={playAgain}>
+          PLAY AGAIN
+        </button>
+      )}
     </div>
   );
 }

@@ -55,6 +55,16 @@ app.get("/api/word/daily", (req, res) => {
   });
 });
 
+app.get("/api/word/random", (req, res) => {
+  const randomIndex = Math.floor(Math.random() * words.length);
+  const randomWord = words[randomIndex];
+
+  res.json({
+    mode: "random",
+    word: randomWord,
+  });
+});
+
 app.get("/api/game/daily-status", authMiddleware, async (req, res) => {
   const today = getTodayString();
 

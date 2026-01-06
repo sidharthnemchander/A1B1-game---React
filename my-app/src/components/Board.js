@@ -12,10 +12,9 @@ const Board = ({ word, onGameOver, onWin, showMessage }) => {
   );
   const [currentRow, setCurrentRow] = useState(0);
   const [currentCol, setCurrentCol] = useState(0);
-  const [visibleRows, setVisibleRows] = useState(1); // Track number of visible rows
-  const [rowHints, setRowHints] = useState(Array(10).fill("")); // Store hints for each row
+  const [visibleRows, setVisibleRows] = useState(1);
+  const [rowHints, setRowHints] = useState(Array(10).fill(""));
 
-  // Use effect to set focus on the board
   useEffect(() => {
     const boardElement = document.getElementById("board");
     if (boardElement) {
@@ -61,7 +60,7 @@ const Board = ({ word, onGameOver, onWin, showMessage }) => {
       } else {
         setCurrentRow(currentRow + 1);
         setCurrentCol(0);
-        setVisibleRows(visibleRows + 1); // Increase visible rows
+        setVisibleRows(visibleRows + 1);
         if (currentRow === 9) {
           onGameOver(currentRow + 1);
         }
@@ -110,7 +109,7 @@ const Board = ({ word, onGameOver, onWin, showMessage }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        outline: "none", // Remove focus outline
+        outline: "none",
       }}
     >
       {rows.map((row, rowIndex) =>

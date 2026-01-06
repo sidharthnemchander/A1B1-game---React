@@ -1,5 +1,3 @@
-import React from 'react';
-
 const GameOver = ({ word, gameover }) => {
   if (!gameover) return null;
   return (
