@@ -254,7 +254,7 @@ function App() {
       {showHelp && <HelpSlider />}
       {gameMode === "random" && gameStatus !== "playing" && (
         <button className="play-again-button" onClick={playAgain}>
-          PLAY AGAIN
+          PLAY AGAIN ?
         </button>
       )}
     </div>
