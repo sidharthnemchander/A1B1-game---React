@@ -603,6 +603,12 @@ body {
   background: var(--bg-color);
 }
 
+.auth-container > .auth-input,
+.auth-container > .auth-button {
+  max-width: 400px;
+  width: 100%;
+}
+
 .auth-card {
   width: 100%;
   max-width: 400px;
@@ -686,7 +692,7 @@ body {
 }
 
 /* =========================================
-   8. LEADERBOARD (Elegant Table)
+   8. LEADERBOARD 
    ========================================= */
 .leaderboard-container {
   padding: 2rem;
@@ -696,6 +702,7 @@ body {
   text-align: center;
   background: var(--bg-color);
   min-height: 100vh;
+  font-family: "Share Tech Mono", monospace;
 }
 
 .leaderboard-link {
