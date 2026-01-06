@@ -8,7 +8,6 @@ import MessageBox from "./components/MessageBox";
 import WinMessage from "./components/WinMessage";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -21,6 +20,7 @@ function App() {
   const [resultSent, setResultSent] = useState(false);
   const [dailyPlayed, setDailyPlayed] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
   const fetchWord = async (mode) => {
@@ -112,24 +112,6 @@ function App() {
     setTimeout(() => setMessage(""), 2000);
   };
 
-  if (!loggedIn) {
-    if (showRegister) {
-      return (
-        <Register
-          onRegister={() => setShowRegister(false)}
-          goToLogin={() => setShowRegister(false)}
-        />
-      );
-    }
-
-    return (
-      <Login
-        onLogin={() => setLoggedIn(true)}
-        goToRegister={() => setShowRegister(true)}
-      />
-    );
-  }
-
   if (showLeaderboard) {
     return (
       <div className="App">
@@ -145,15 +127,39 @@ function App() {
     );
   }
 
+  if (showLogin && !loggedIn) {
+    return (
+      <Login
+        onLogin={() => {
+          setLoggedIn(true);
+          setShowLogin(false);
+        }}
+        goToRegister={() => {
+          setShowLogin(false);
+          setShowRegister(true);
+        }}
+      />
+    );
+  }
+
   if (!gameMode) {
     return (
       <div className="mode-selection">
+        <MessageBox message={message} />
         <h1 className="main-title">THE A1B1 GAME</h1>
 
         {/* Daily Challenge - Left Panel */}
         <div
           className={`mode-panel left ${dailyPlayed ? "disabled" : ""}`}
-          onClick={() => !dailyPlayed && handleModeSelect("daily")}
+          onClick={() => {
+            if (!loggedIn) {
+              showMessage("Login Required");
+              return;
+            }
+            if (!dailyPlayed) {
+              handleModeSelect("daily");
+            }
+          }}
         >
           <div className="mode-content">
             <p className="mode-title">Ranked</p>
@@ -189,14 +195,22 @@ function App() {
               </button>
 
               <button
-                className="logout-button"
+                className={`logout-button ${
+                  loggedIn ? "logged-in" : "logged-out"
+                }`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  localStorage.removeItem("token");
-                  setLoggedIn(false);
+
+                  if (loggedIn) {
+                    localStorage.removeItem("token");
+                    setLoggedIn(false);
+                    showMessage("Logged out");
+                  } else {
+                    setShowLogin(true);
+                  }
                 }}
               >
-                Logout
+                {loggedIn ? "Logout" : "Login"}
               </button>
             </div>
           </div>

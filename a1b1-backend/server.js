@@ -56,31 +56,15 @@ app.get("/api/word/daily", (req, res) => {
 });
 
 app.get("/api/game/daily-status", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+  const today = getTodayString();
 
-    const today = getTodayString();
-
-    const played = user.lastPlayedDate === today && user.dailyGamesPlayed >= 1;
-
-    res.json({ played });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-app.get("/api/word/random", (req, res) => {
-  const randomIndex = Math.floor(Math.random() * words.length);
-  const randomWord = words[randomIndex];
-
-  res.json({
-    mode: "random",
-    word: randomWord,
+  const played = await GameResult.exists({
+    userId: req.userId,
+    mode: "daily",
+    date: today,
   });
+
+  res.json({ played: !!played });
 });
 
 app.get("/api/test-db", async (req, res) => {
@@ -96,98 +80,90 @@ app.get("/api/test-db", async (req, res) => {
 
 app.post("/api/game/result", authMiddleware, async (req, res) => {
   try {
-    const { mode, won, attemptsUsed, maxAttempts, word } = req.body;
+    const { mode, won, attemptsUsed, word } = req.body;
 
-    if (!mode || !["daily", "random"].includes(mode)) {
-      return res.status(400).json({ error: "Invalid mode" });
-    }
-
-    if (typeof won !== "boolean") {
-      return res.status(400).json({ error: "Invalid win status" });
-    }
-
-    //  Get or create user
-    const user = await User.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    if (mode !== "daily") {
+      return res.json({ ignored: true });
     }
 
     const today = getTodayString();
 
-    if (mode === "daily") {
-      if (user.lastPlayedDate === today && user.dailyGamesPlayed >= 1) {
-        return res.status(403).json({
-          error: "Daily challenge already played today",
-        });
-      }
+    const existing = await GameResult.findOne({
+      userId: req.userId,
+      date: today,
+      mode: "daily",
+    });
+
+    if (existing) {
+      return res.status(403).json({
+        error: "Daily challenge already played today",
+      });
     }
 
-    // Save game result
     const gameResult = new GameResult({
-      userId: user._id,
-      mode,
+      userId: req.userId,
+      mode: "daily",
       word,
       attemptsUsed,
-      maxAttempts,
+      maxAttempts: 10,
       won,
       date: today,
     });
 
     await gameResult.save();
-    user.totalGames += 1;
-
-    if (won) {
-      user.totalWins += 1;
-    }
-
-    // Daily mode affects daily stats
-    if (mode === "daily") {
-      // Reset daily counters if new day
-      if (user.lastPlayedDate !== today) {
-        user.dailyGamesPlayed = 0;
-        user.dailyWins = 0;
-      }
-
-      user.dailyGamesPlayed += 1;
-
-      if (won) {
-        user.dailyWins += 1;
-      }
-
-      user.lastPlayedDate = today;
-    }
-
-    // Avg attempts update (simple running average)
-    const prevGames = user.totalGames - 1;
-    user.avgAttempts =
-      prevGames === 0
-        ? attemptsUsed
-        : (user.avgAttempts * prevGames + attemptsUsed) / user.totalGames;
-
-    await user.save();
 
     res.json({ success: true });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
-  console.log("GAME RESULT BODY:", req.body);
 });
 
 app.get("/api/leaderboard/daily", async (req, res) => {
   try {
-    const today = getTodayString();
+    const leaderboard = await GameResult.aggregate([
+      { $match: { mode: "daily" } },
 
-    const leaderboard = await User.find({
-      lastPlayedDate: today,
-    })
-      .sort({
-        dailyWins: -1,
-        avgAttempts: 1,
-        updatedAt: 1,
-      })
-      .limit(10)
-      .select("username dailyWins avgAttempts -_id");
+      {
+        $group: {
+          _id: "$userId",
+          totalWins: {
+            $sum: { $cond: ["$won", 1, 0] },
+          },
+          totalGames: { $sum: 1 },
+          avgAttempts: { $avg: "$attemptsUsed" },
+          firstWinDate: {
+            $min: {
+              $cond: ["$won", "$date", null],
+            },
+          },
+        },
+      },
+
+      { $sort: { totalWins: -1, avgAttempts: 1, firstWinDate: 1 } },
+
+      { $limit: 10 },
+
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+
+      { $unwind: "$user" },
+
+      {
+        $project: {
+          _id: 0,
+          username: "$user.username",
+          wins: "$totalWins",
+          avgAttempts: { $round: ["$avgAttempts", 2] },
+        },
+      },
+    ]);
 
     res.json(leaderboard);
   } catch (err) {

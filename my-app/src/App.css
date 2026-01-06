@@ -196,11 +196,12 @@ body {
   position: absolute;
   top: -10%;
   bottom: -10%;
-  left: 50%;
+  left: var(--crack-pos, 50%);
   width: 12px; /* Slightly thicker */
+  transition: left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
   background: #4b5563; /* Dark Grey core */
   transform: translateX(-50%);
-  z-index: 10;
+  z-index: 3;
   /* More aggressive, jagged clip-path */
   clip-path: polygon(
     20% 0%,
@@ -228,6 +229,14 @@ body {
   );
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* Faint white glow */
   animation: riftBreathing 3s infinite ease-in-out;
+}
+
+.mode-selection:has(.mode-panel.right:hover) .lightning-crack {
+  --crack-pos: 42%;
+}
+
+.mode-selection:has(.mode-panel.left:hover) .lightning-crack {
+  --crack-pos: 58%;
 }
 
 @keyframes riftBreathing {
@@ -309,19 +318,23 @@ body {
   color: #000;
   transform: translateY(5px);
 }
+/* =========================================
+   Login and Logout 
+   ========================================= */
 
 .logout-button {
   position: fixed;
   bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
+  inset-inline: 0;
+  margin-inline: auto;
+  width: fit-content;
+  z-index: 99999;
 
   background-color: #000;
   border: 2px solid #ef4444; /* Red border */
   color: #ef4444;
 
-  padding: 12px 30px; /* Bigger size */
+  padding: 20px 50px; /* Bigger size */
   font-size: 1.1rem;
   font-weight: bold;
   letter-spacing: 1px;
@@ -341,6 +354,29 @@ body {
 }
 
 .logout-button:hover {
+  background-color: #ef4444;
+  color: #000;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+/* Logged OUT → Login (GREEN) */
+.logout-button.logged-out {
+  border-color: #22c55e; /* green */
+  color: #22c55e;
+}
+
+.logout-button.logged-out:hover {
+  background-color: #22c55e;
+  color: #000;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+}
+
+/* Logged IN → Logout (RED) */
+.logout-button.logged-in {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.logout-button.logged-in:hover {
   background-color: #ef4444;
   color: #000;
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
@@ -692,90 +728,123 @@ body {
 }
 
 /* =========================================
-   8. LEADERBOARD 
+   LEADERBOARD - Hacker/Terminal Theme
    ========================================= */
 .leaderboard-container {
-  padding: 2rem;
-  max-width: 800px;
-  width: 90%;
+  padding: 3rem;
+  max-width: 900px;
+  width: 95%;
   margin: 0 auto;
-  text-align: center;
-  background: var(--bg-color);
   min-height: 100vh;
+  background: var(--bg-color);
   font-family: "Share Tech Mono", monospace;
 }
 
-.leaderboard-link {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: none;
-  border: 1px solid var(--tile-border);
-  color: var(--text-main);
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
+.leaderboard-container h2 {
+  text-align: center;
+  font-size: 2.1rem;
+  color: var(--accent-crack);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin-bottom: 3rem;
+  margin-top: 2rem;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
 
-.leaderboard-link:hover {
-  border-color: var(--text-main);
-  background: rgba(255, 255, 255, 0.05);
-}
-
+/* The Table */
 .leaderboard-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 2rem;
-  background: var(--panel-left);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.leaderboard-table th,
-.leaderboard-table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid var(--tile-border);
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .leaderboard-table th {
-  background: #343541;
+  text-align: left;
+  padding: 15px;
+  color: #71717a; /* Muted grey headers */
+  font-size: 1rem;
   text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  color: var(--text-muted);
+  letter-spacing: 2px;
+  border-bottom: 1px solid #3f3f46;
 }
 
-.leaderboard-table tr:hover {
-  background: rgba(255, 255, 255, 0.03);
+.leaderboard-table td {
+  background: #18181b;
+  padding: 20px;
+  color: var(--text-main);
+  font-size: 1.2rem;
+  border: 1px solid transparent;
+  transition: all 0.2s;
 }
 
-/* Highlighting Top 3 */
+/* Rounded corners for rows */
+.leaderboard-table tr td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.leaderboard-table tr td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Hover Effect on Rows */
+.leaderboard-table tbody tr:hover td {
+  background: #27272a;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--accent-crack);
+  transform: scale(1.01);
+}
+
+/* Rank Colors */
 .leaderboard-table tr:nth-child(1) td {
-  color: var(--gold);
-  font-weight: bold;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-}
-.leaderboard-table tr:nth-child(1) td:first-child::before {
-  content: "🥇 ";
-}
-
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+} /* Gold */
 .leaderboard-table tr:nth-child(2) td {
-  color: var(--silver);
-  font-weight: bold;
-}
-.leaderboard-table tr:nth-child(2) td:first-child::before {
-  content: "🥈 ";
+  color: #e4e4e7;
+  text-shadow: 0 0 10px rgba(228, 228, 231, 0.4);
+} /* Silver */
+.leaderboard-table tr:nth-child(3) td {
+  color: #b45309;
+} /* Bronze */
+
+/* "Back to Game" Button - Simple & Different */
+.leaderboard-link {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+
+  font-family: "Share Tech Mono", monospace;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 100;
+
+  /* Text reveal effect */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.3s;
 }
 
-.leaderboard-table tr:nth-child(3) td {
-  color: var(--bronze);
+.leaderboard-link::before {
+  content: "<";
   font-weight: bold;
+  display: inline-block;
+  transition: transform 0.3s;
 }
-.leaderboard-table tr:nth-child(3) td:first-child::before {
-  content: "🥉 ";
+
+.leaderboard-link:hover {
+  color: var(--accent-crack);
+}
+
+.leaderboard-link:hover::before {
+  transform: translateX(-5px); /* Arrow moves left on hover */
 }
 
 /* =========================================
@@ -846,4 +915,118 @@ body {
   color: var(--error);
   font-size: 0.9rem;
   margin-top: 10px;
+}
+/* =========================================
+   WIN & GAME OVER POPUPS
+   ========================================= */
+
+/* Common Overlay for Modals (Optional background dim) */
+#game-over-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85); /* Dark dim background */
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* WIN MESSAGE (Floating Glass Box) */
+#game-win-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background: rgba(16, 185, 129, 0.2); /* Transparent Green */
+  border: 2px solid #10b981;
+  color: #fff;
+
+  padding: 2rem 4rem;
+  border-radius: 12px;
+
+  font-family: "Share Tech Mono", monospace; /* Hacker Vibe */
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+  box-shadow: 0 0 50px rgba(16, 185, 129, 0.3);
+
+  z-index: 2000;
+  animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* GAME OVER CARD */
+.game-over-content {
+  background: #18181b; /* Dark Zinc */
+  border: 1px solid #ef4444; /* Red Border */
+  padding: 3rem;
+  border-radius: 4px; /* Sharper corners for tech feel */
+  text-align: center;
+  box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
+
+  /* Diagonal cut corner effect */
+  clip-path: polygon(
+    20px 0,
+    100% 0,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0 100%,
+    0 20px
+  );
+
+  animation: dropIn 0.4s ease-out;
+}
+
+.game-over-content .message {
+  font-family: "Share Tech Mono", monospace;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.game-over-content .word-label {
+  font-size: 0.9rem;
+  color: #71717a;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.game-over-content .word {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 3rem;
+  color: #ef4444; /* Red Text */
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-top: 0;
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes popUp {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dropIn {
+  0% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

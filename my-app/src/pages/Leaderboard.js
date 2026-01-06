@@ -47,7 +47,7 @@ function Leaderboard() {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{user.username}</td>
-                <td>{user.dailyWins}</td>
+                <td>{user.wins}</td>
                 <td>{user.avgAttempts?.toFixed(2)}</td>
               </tr>
             ))}
