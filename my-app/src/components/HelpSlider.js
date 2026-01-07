@@ -1,6 +1,5 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
-import React from "react";
 import "./HelpSlider.css";
 
 const HelpSlider = () => {
@@ -58,7 +57,7 @@ const HelpSlider = () => {
                   {index === 1 &&
                     "If a guessed letter is in the correct position, you get an A1."}
                   {index === 2 &&
-                    "If a guessed letter is in the word but the wrong position, you get a B1."}
+                    "If a guessed letter is in the word but in the wrong position, you get a B1."}
                   {index === 3 && "If no letters match, a 0 is displayed."}
                   {index === 4 &&
                     "If a letter appears twice in your guess but once in the word, A1B1 is shown."}

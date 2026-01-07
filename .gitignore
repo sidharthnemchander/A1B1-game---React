@@ -1,0 +1,5 @@
+# Ignore backend dependencies
+a1b1-backend/node_modules/
+
+# Ignore backend secrets
+a1b1-backend/.env
