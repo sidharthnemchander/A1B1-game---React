@@ -82,6 +82,7 @@ const Board = ({ word, onGameOver, onWin, showMessage }) => {
   };
 
   const CheckLogic = (userword, word) => {
+    word = word.toUpperCase();
     let A = 0;
     let B = 0;
     for (let i = 0; i < 5; i++) {
@@ -97,6 +98,7 @@ const Board = ({ word, onGameOver, onWin, showMessage }) => {
         }
       }
     }
+
     return `A${A}B${B}`;
   };
 
