@@ -1,18 +1,67 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
-import "./HelpSlider.css";
+import { useState } from "react";
 
-const HelpSlider = () => {
-  const imagePaths = Array.from(
-    { length: 8 },
-    (_, index) => `${process.env.PUBLIC_URL}/photo${index + 1}.png`
-  );
+import "./HelpSlider.css";
+import VisualizerSlide from "./VisualizerSlide";
+
+const slides = [
+  {
+    row1: ["S", "T", "O", "R", "M"],
+    row2: ["G", "L", "O", "B", "E"],
+    events: {
+      "2-2": { color: "green", add: "A" },
+    },
+  },
+
+  {
+    row1: ["S", "I", "G", "H", "T"],
+    row2: ["G", "R", "O", "U", "P"],
+    events: {
+      "2-0": { color: "yellow", add: "B" },
+    },
+  },
+
+  {
+    row1: ["L", "O", "O", "P", "S"],
+    row2: ["I", "N", "F", "R", "A"],
+    events: {},
+  },
+
+  {
+    row1: ["D", "I", "C", "E", "S"],
+    row2: ["S", "L", "O", "W", "S"],
+    events: {
+      "4-0": { color: "yellow", add: "B" },
+      "4-4": { color: "green", add: "A" },
+    },
+  },
+
+  {
+    row1: ["M", "A", "G", "M", "A"],
+    row2: ["M", "A", "M", "B", "A"],
+    events: {
+      "0-0": { color: "green", add: "A" },
+      "0-2": { color: "green", add: "B" },
+      "3-0": { color: "yellow", add: "B" },
+      "1-1": { color: "green", add: "A" },
+      "4-1": { color: "yellow", add: "B" },
+      "3-2": { color: "yellow", add: "B" },
+      "1-4": { color: "yellow", add: "B" },
+      "4-4": { color: "green", add: "A" },
+    },
+  },
+];
+
+export default function HelpSlider() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [restartKey, setRestartKey] = useState(0);
 
   return (
     <div
-      id="image-slider"
+      id="help-slider"
       style={{
-        display: "block",
         maxWidth: "800px",
         margin: "auto",
         padding: "20px",
@@ -20,61 +69,60 @@ const HelpSlider = () => {
     >
       <Splide
         options={{
-          type: "loop",
+          type: "slide",
           perPage: 1,
-          autoplay: true,
-          interval: 3000,
-          pauseOnHover: true,
           arrows: true,
           pagination: true,
           drag: true,
-          speed: 1000,
-          easing: "ease",
+          speed: 700,
         }}
-        aria-label="Help Slider"
+        onMoved={(_, newIndex) => {
+          setActiveIndex(newIndex);
+          setPlaying(false);
+          setRestartKey((k) => k + 1);
+        }}
+        aria-label="How to Play"
       >
-        {imagePaths.map((path, index) => (
+        {slides.map((slide, index) => (
           <SplideSlide key={index}>
-            <div className="slide-container">
-              <img
-                src={path}
-                alt={`Slide ${index + 1}`}
-                onError={(e) => (e.target.style.display = "none")}
-                className="slide-image"
-              />
-              <div className="slide-overlay"></div>
-              <div className="slide-content">
-                <h2
-                  style={{
-                    fontFamily: "papyrus",
-                    textAlign: "center",
-                    color: "white",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {index === 0 &&
-                    "Welcome to the A1B1 game! Your goal is to GUESS THE HIDDEN WORD."}
-                  {index === 1 &&
-                    "If a guessed letter is in the correct position, you get an A1."}
-                  {index === 2 &&
-                    "If a guessed letter is in the word but in the wrong position, you get a B1."}
-                  {index === 3 && "If no letters match, a 0 is displayed."}
-                  {index === 4 &&
-                    "If a letter appears twice in your guess but once in the word, A1B1 is shown."}
-                  {index === 5 &&
-                    "If a letter from your guess is in the hidden word twice, you get an A1B1."}
-                  {index === 6 &&
-                    "You have three extra guesses to check letter positions."}
-                  {index === 7 &&
-                    "You get 10 normal attempts and 3 guesses. Good luck, nerd!"}
-                </h2>
-              </div>
-            </div>
+            <VisualizerSlide
+              config={slide}
+              playing={playing && index === activeIndex}
+              restartSignal={restartKey}
+            />
           </SplideSlide>
         ))}
       </Splide>
+      <div style={{ textAlign: "center", marginTop: "15px" }}>
+        <button
+          onClick={() => setPlaying((p) => !p)}
+          style={{
+            padding: "8px 16px",
+            fontSize: "16px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          {playing ? "Pause" : "Play"}
+        </button>
+        <div style={{ textAlign: "center", marginTop: "15px" }}>
+          <button
+            onClick={() => setPlaying((p) => !p)}
+            style={{ marginRight: "10px" }}
+          >
+            {playing ? "Pause" : "Play"}
+          </button>
+
+          <button
+            onClick={() => {
+              setPlaying(false);
+              setRestartKey((k) => k + 1);
+            }}
+          >
+            Restart
+          </button>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default HelpSlider;
+}
