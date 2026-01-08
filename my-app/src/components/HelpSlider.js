@@ -57,6 +57,7 @@ export default function HelpSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [restartKey, setRestartKey] = useState(0);
+  const isVisualizerSlide = activeIndex > 0 && activeIndex <= slides.length;
 
   return (
     <div
@@ -72,7 +73,6 @@ export default function HelpSlider() {
           type: "slide",
           perPage: 1,
           arrows: true,
-          pagination: true,
           drag: true,
           speed: 700,
         }}
@@ -83,45 +83,51 @@ export default function HelpSlider() {
         }}
         aria-label="How to Play"
       >
+        <SplideSlide>
+          <div className="image-slide">
+            <img
+              src={`${process.env.PUBLIC_URL}/photo7.png`}
+              alt="How the game works"
+            />
+          </div>
+        </SplideSlide>
         {slides.map((slide, index) => (
           <SplideSlide key={index}>
             <VisualizerSlide
               config={slide}
-              playing={playing && index === activeIndex}
+              playing={playing && activeIndex === index + 1}
               restartSignal={restartKey}
             />
           </SplideSlide>
         ))}
+        <SplideSlide>
+          <div className="image-slide">
+            <img
+              src={`${process.env.PUBLIC_URL}/photo8.png`}
+              alt="You're ready to play"
+            />
+          </div>
+        </SplideSlide>
       </Splide>
-      <div style={{ textAlign: "center", marginTop: "15px" }}>
+      <div className="controls">
         <button
+          className="control-btn"
+          disabled={!isVisualizerSlide}
           onClick={() => setPlaying((p) => !p)}
-          style={{
-            padding: "8px 16px",
-            fontSize: "16px",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
         >
           {playing ? "Pause" : "Play"}
         </button>
-        <div style={{ textAlign: "center", marginTop: "15px" }}>
-          <button
-            onClick={() => setPlaying((p) => !p)}
-            style={{ marginRight: "10px" }}
-          >
-            {playing ? "Pause" : "Play"}
-          </button>
 
-          <button
-            onClick={() => {
-              setPlaying(false);
-              setRestartKey((k) => k + 1);
-            }}
-          >
-            Restart
-          </button>
-        </div>
+        <button
+          className="control-btn"
+          disabled={!isVisualizerSlide}
+          onClick={() => {
+            setPlaying(false);
+            setRestartKey((k) => k + 1);
+          }}
+        >
+          Restart
+        </button>
       </div>
     </div>
   );
