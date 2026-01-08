@@ -40,7 +40,7 @@ export default function VisualizerSlide({ config, playing, restartSignal }) {
   const [bCount, setBCount] = useState(0);
 
   useEffect(() => {
-    setStepIndex(1);
+    setStepIndex(0);
     setACount(0);
     setBCount(0);
   }, [restartSignal]);

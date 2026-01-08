@@ -2,7 +2,6 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 import { useState } from "react";
 
-import "./HelpSlider.css";
 import VisualizerSlide from "./VisualizerSlide";
 
 const slides = [
@@ -84,13 +83,14 @@ export default function HelpSlider() {
         aria-label="How to Play"
       >
         <SplideSlide>
-          <div className="image-slide">
+          <div className="intro-hero">
             <img
               src={`${process.env.PUBLIC_URL}/photo7.png`}
               alt="How the game works"
             />
           </div>
         </SplideSlide>
+
         {slides.map((slide, index) => (
           <SplideSlide key={index}>
             <VisualizerSlide
