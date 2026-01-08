@@ -129,7 +129,7 @@ function App() {
           style={{ bottom: "auto", top: "20px" }}
           onClick={() => setShowLeaderboard(false)}
         >
-          ← Back to Game
+          ← Back to Home
         </button>
         <Leaderboard />
       </div>

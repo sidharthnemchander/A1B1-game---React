@@ -851,8 +851,7 @@ body {
 /* =========================================
    9. MISC UI ELEMENTS
    ========================================= */
-/* Help Button */
-/* REPLACES #help */
+
 #help {
   position: fixed;
   top: 50%; /* Center vertical */
@@ -883,8 +882,6 @@ body {
   border-color: #fbbf24;
 }
 
-/* REPLACES .help-slider (assumed class for the slider container) */
-/* REPLACE: Help Slider */
 .help-slider {
   position: fixed;
   top: 50%;
@@ -893,14 +890,14 @@ body {
 
   width: 300px; /* Much Smaller width */
   max-height: 400px;
-  overflow-y: auto;
+  overflow-y: visible;
 
   background: rgba(32, 33, 35, 0.98); /* Nearly solid bg */
   border: 1px solid var(--text-muted);
   padding: 1.5rem;
   border-radius: 8px;
 
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 10px 3px rgba(0, 0, 0, 0.8);
   z-index: 2000; /* Highest layer */
   text-align: center;
   font-size: 0.9rem;
@@ -1047,4 +1044,117 @@ body {
 .play-again-button:hover {
   background: #22c55e;
   color: #000;
+}
+
+.visualizer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.tile {
+  width: 55px;
+  height: 55px;
+  border: 2px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  transition: background-color 0.4s ease;
+}
+
+.tile.default {
+  background: transparent;
+}
+
+.tile.gray {
+  background: #777;
+  color: white;
+}
+
+.tile.green {
+  background: #4caf50;
+  color: white;
+}
+
+.tile.yellow {
+  background: #ffc107;
+  color: black;
+}
+
+.hint-box {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #111;
+  color: white;
+  font-size: 16px;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.control-btn {
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: #222;
+  color: white;
+}
+
+.control-btn:hover {
+  background: #333;
+}
+
+.control-btn:first-child {
+  background: #4caf50;
+}
+
+.control-btn:first-child:hover {
+  background: #43a047;
+}
+
+.image-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 280px;
+}
+
+.image-slide img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+}
+.control-btn:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.intro-hero {
+  position: relative;
+  height: auto;
+  max-height: relative;
+  border-radius: 14px;
+  overflow: cover;
+}
+
+.intro-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
