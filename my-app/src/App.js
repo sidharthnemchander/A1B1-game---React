@@ -228,7 +228,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App" key={boardKey}>
       <h1 id="title">The A1B1 GAME</h1>
 
       <p className="mode-badge">
@@ -237,14 +237,15 @@ function App() {
 
       <hr />
       <br />
-      <Dash word={word} onWin={handleWin} />
-      <Board
-        word={word}
-        onGameOver={handleGameOver}
-        onWin={handleWin}
-        key={boardKey}
-        showMessage={showMessage}
-      />
+      <div>
+        <Dash word={word} onWin={handleWin} />
+        <Board
+          word={word}
+          onGameOver={handleGameOver}
+          onWin={handleWin}
+          showMessage={showMessage}
+        />
+      </div>
       {gameStatus === "lose" && <GameOver word={word} gameover={true} />}
       <MessageBox message={message} />
       {gameStatus === "win" && <WinMessage gameover={true} />}

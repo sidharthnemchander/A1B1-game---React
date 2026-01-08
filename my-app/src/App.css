@@ -538,6 +538,7 @@ body {
   align-items: center;
   font-size: 2rem;
   font-weight: bold;
+  font-family: "Viner Hand ITC";
   text-transform: uppercase;
   transition: all 0.2s;
 }
