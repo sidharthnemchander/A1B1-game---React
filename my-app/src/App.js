@@ -8,6 +8,7 @@ import MessageBox from "./components/MessageBox";
 import WinMessage from "./components/WinMessage";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -21,6 +22,7 @@ function App() {
   const [dailyPlayed, setDailyPlayed] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [boardKey, setBoardKey] = useState(0);
 
   const fetchWord = async (mode) => {
@@ -51,6 +53,12 @@ function App() {
     setResultSent(false);
     setBoardKey((k) => k + 1);
     fetchWord("random");
+  };
+
+  const goBackToHome = () => {
+    setGameMode(null);
+    setGameStatus("playing");
+    setResultSent(false);
   };
 
   const reportGameResult = async (won, attemptsUsed) => {
@@ -145,6 +153,21 @@ function App() {
         }}
         goToRegister={() => {
           setShowLogin(false);
+          setShowRegister(true);
+        }}
+      />
+    );
+  }
+  if (showRegister && !loggedIn) {
+    return (
+      <Register
+        onRegister={() => {
+          setShowRegister(false);
+          setShowLogin(true); // go back to login after register
+        }}
+        goToLogin={() => {
+          setShowRegister(false);
+          setShowLogin(true);
         }}
       />
     );
@@ -229,6 +252,9 @@ function App() {
 
   return (
     <div className="App" key={boardKey}>
+      <button className="leaderboard-link" onClick={goBackToHome}>
+        ← Back to Home
+      </button>
       <h1 id="title">The A1B1 GAME</h1>
 
       <p className="mode-badge">
@@ -246,9 +272,13 @@ function App() {
           showMessage={showMessage}
         />
       </div>
-      {gameStatus === "lose" && <GameOver word={word} gameover={true} />}
+      {gameStatus === "lose" && (
+        <GameOver word={word} gameover={true} onBackHome={goBackToHome} />
+      )}
       <MessageBox message={message} />
-      {gameStatus === "win" && <WinMessage gameover={true} />}
+      {gameStatus === "win" && (
+        <WinMessage gameover={true} onBackHome={goBackToHome} />
+      )}
       <button id="help" onClick={handleHelpClick}>
         ?
       </button>

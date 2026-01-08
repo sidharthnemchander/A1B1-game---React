@@ -3,8 +3,8 @@ import Hint from "./Hint";
 import Tile from "./Tile";
 
 const Board = ({ word, onGameOver, onWin, showMessage }) => {
-  console.log("Board word", word);
   // Initialize with arrays that can be individually modified
+  console.log(word);
   const [rows, setRows] = useState(
     Array(10)
       .fill()
@@ -75,10 +75,20 @@ const Board = ({ word, onGameOver, onWin, showMessage }) => {
   };
 
   const checkWordValidity = async (u_word) => {
-    const response = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${u_word}`
-    );
-    return response.ok;
+    try {
+      const response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${u_word.toLowerCase()}`
+      );
+
+      if (u_word === word.toUpperCase()) {
+        return true;
+      }
+
+      return response.ok;
+    } catch (err) {
+      console.error("Dictionary check failed", err);
+      return false;
+    }
   };
 
   const CheckLogic = (userword, word) => {
