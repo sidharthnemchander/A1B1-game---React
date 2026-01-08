@@ -3,7 +3,7 @@ import Hint from "./Hint";
 import Tile from "./Tile";
 
 const Board = ({ word, onGameOver, onWin, showMessage }) => {
-  console.log(word);
+  console.log("Board word", word);
   // Initialize with arrays that can be individually modified
   const [rows, setRows] = useState(
     Array(10)
