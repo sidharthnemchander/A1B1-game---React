@@ -5,6 +5,7 @@
   --bg-color: #202123; /* ChatGPT-like warm dark */
   --panel-left: #2a2b32; /* Slightly lighter for panels */
   --panel-right: #1e1e24;
+  --tile-border: rgba(255, 255, 255, 0.9);
   --text-main: #ececf1;
   --text-muted: #acacbe;
   --accent-crack: #fbbf24; /* Electric warm amber */
@@ -532,11 +533,14 @@ body {
 .dash {
   width: 50px;
   height: 60px;
-  border-bottom: 1px solid var(--tile-border);
+  border-bottom: 2px solid var(--tile-border);
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  background: none;
+  border-bottom-color: rgba(189, 183, 183, 0.75);
+  color: rgba(212, 200, 200, 0.9);
   font-weight: bold;
   font-family: "Viner Hand ITC";
   text-transform: uppercase;
@@ -824,7 +828,7 @@ body {
   font-size: 1.1rem;
   cursor: pointer;
   padding: 10px;
-  z-index: 100;
+  z-index: 100000;
 
   /* Text reveal effect */
   display: flex;
@@ -858,8 +862,8 @@ body {
   right: 0; /* Stick to right edge */
   transform: translateY(-50%);
 
-  width: 60px; /* Bigger */
-  height: 60px;
+  width: 70px; /* Bigger */
+  height: 70px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border-radius: 10px 0 0 10px; /* Flat on right side */
@@ -1154,7 +1158,30 @@ body {
 }
 
 .intro-hero img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 70%;
+  height: auto;
+  object-fit: overflow;
+  align-items: center;
+}
+
+.text-hint {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.text-hint strong {
+  color: #fff;
+  font-weight: 500;
 }

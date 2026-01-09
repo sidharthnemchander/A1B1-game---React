@@ -1,8 +1,7 @@
-import confetti from 'canvas-confetti';
-import React, { useEffect } from 'react';
+import confetti from "canvas-confetti";
+import { useEffect } from "react";
 
-
-const WinMessage = ({ gameover }) => {
+const WinMessage = ({ gameover, onBackHome }) => {
   useEffect(() => {
     if (gameover) {
       const duration = 5 * 1000;
@@ -33,8 +32,11 @@ const WinMessage = ({ gameover }) => {
 
   if (!gameover) return null;
   return (
-    <div id="game-win-message">
-      You've won the game!
+    <div>
+      <button className="leaderboard-link" onClick={onBackHome}>
+        ← Back to Home
+      </button>
+      <div id="game-win-message">You've won the game!</div>
     </div>
   );
 };
