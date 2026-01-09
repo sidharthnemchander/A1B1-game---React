@@ -56,7 +56,7 @@ export default function HelpSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [restartKey, setRestartKey] = useState(0);
-  const isVisualizerSlide = activeIndex > 0 && activeIndex <= slides.length;
+  const isVisualizerSlide = activeIndex > 0 && activeIndex <= slides.length + 1;
 
   return (
     <div
@@ -83,10 +83,18 @@ export default function HelpSlider() {
         aria-label="How to Play"
       >
         <SplideSlide>
-          <div className="intro-hero">
+          <div className="image-slide">
+            <img
+              src={`${process.env.PUBLIC_URL}/photo6.png`}
+              alt="How the game works"
+            />
+          </div>
+        </SplideSlide>
+        <SplideSlide>
+          <div className="image-slide">
             <img
               src={`${process.env.PUBLIC_URL}/photo7.png`}
-              alt="How the game works"
+              alt="You're ready to play"
             />
           </div>
         </SplideSlide>
@@ -95,7 +103,7 @@ export default function HelpSlider() {
           <SplideSlide key={index}>
             <VisualizerSlide
               config={slide}
-              playing={playing && activeIndex === index + 1}
+              playing={playing && activeIndex === index + 2}
               restartSignal={restartKey}
             />
           </SplideSlide>

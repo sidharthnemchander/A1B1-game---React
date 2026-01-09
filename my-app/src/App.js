@@ -93,7 +93,7 @@ function App() {
       showMessage(data.error);
       return;
     }
-
+    setDailyPlayed(true);
     setResultSent(true);
   };
 

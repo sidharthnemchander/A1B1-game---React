@@ -107,6 +107,10 @@ export default function VisualizerSlide({ config, playing, restartSignal }) {
           </>
         )}
       </div>
+      <p className="text-hint">
+        <strong>Row 1 :</strong> Hidden word <br /> <strong>Row 2 :</strong>{" "}
+        User Word
+      </p>
     </div>
   );
 }
