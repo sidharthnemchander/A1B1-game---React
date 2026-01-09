@@ -24,12 +24,11 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [boardKey, setBoardKey] = useState(0);
+  const API = process.env.REACT_APP_API_URL;
 
   const fetchWord = async (mode) => {
     const url =
-      mode === "daily"
-        ? "http://localhost:5000/api/word/daily"
-        : "http://localhost:5000/api/word/random";
+      mode === "daily" ? `${API}/api/word/daily` : `${API}/api/word/random`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -68,7 +67,7 @@ function App() {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/api/game/result", {
+    const res = await fetch(`${API}//api/game/result`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +99,7 @@ function App() {
   const fetchDailyStatus = async () => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/api/game/daily-status", {
+    const res = await fetch(`${API}/api/game/daily-status`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

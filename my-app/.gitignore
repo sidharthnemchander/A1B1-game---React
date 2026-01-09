@@ -10,7 +10,7 @@ a1b1-backend/.env
 **/node_modules/
 # testing
 /coverage
-
+.env
 # production
 /build
 
