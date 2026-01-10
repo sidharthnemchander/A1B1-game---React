@@ -67,7 +67,7 @@ function App() {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`${API}//api/game/result`, {
+    const res = await fetch(`${API}/api/game/result`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
