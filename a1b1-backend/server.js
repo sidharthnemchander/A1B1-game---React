@@ -44,6 +44,10 @@ function getDailyWordIndex() {
   return sum % words.length;
 }
 
+app.get("/api/test", (req, res) => {
+  res.json({ status: "Backend working" });
+});
+
 app.get("/api/word/daily", (req, res) => {
   const index = getDailyWordIndex();
   const dailyWord = words[index];
