@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 function Leaderboard() {
   const [leaders, setLeaders] = useState([]);
   const [error, setError] = useState("");
-
+  const API = process.env.REACT_APP_API_URL;
   useEffect(() => {
     fetchLeaderboard();
   }, []);
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/leaderboard/daily");
+      const res = await fetch(`${API}/api/leaderboard/daily`);
       const data = await res.json();
 
       if (!res.ok) {

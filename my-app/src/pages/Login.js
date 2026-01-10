@@ -4,9 +4,10 @@ function Login({ onLogin, goToRegister }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const API = process.env.REACT_APP_API_URL;
 
   async function handleLogin() {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+    const res = await fetch(`${API}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
