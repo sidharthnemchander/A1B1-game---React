@@ -1185,3 +1185,54 @@ body {
   color: #fff;
   font-weight: 500;
 }
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: all;
+}
+
+.loading-box {
+  width: 320px;
+  text-align: center;
+}
+
+.loading-text {
+  color: white;
+  font-size: 14px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+.loading-bar {
+  width: 320px;
+  height: 22px;
+  border-radius: 999px;
+  border: 2px solid white;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+.loading-fill {
+  height: 100%;
+  width: 0%;
+  background: white;
+  border-radius: 999px;
+  transition: width 1s ease;
+}
+.loading-text {
+  font-family: "Share Tech Mono", monospace;
+  color: white;
+  font-size: 14px;
+  letter-spacing: 0.6px;
+  margin-bottom: 14px;
+  opacity: 0.9;
+}

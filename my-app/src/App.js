@@ -4,6 +4,7 @@ import Board from "./components/Board";
 import Dash from "./components/Dash";
 import GameOver from "./components/GameOver";
 import HelpSlider from "./components/HelpSlider";
+import Loading from "./components/Loading";
 import MessageBox from "./components/MessageBox";
 import WinMessage from "./components/WinMessage";
 import Leaderboard from "./pages/Leaderboard";
@@ -12,7 +13,7 @@ import Register from "./pages/Register";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
-
+  const [loadingDone, setLoadingDone] = useState(false);
   const [word, setWord] = useState("");
   const [gameStatus, setGameStatus] = useState("playing");
   const [showHelp, setShowHelp] = useState(false);
@@ -162,7 +163,7 @@ function App() {
       <Register
         onRegister={() => {
           setShowRegister(false);
-          setShowLogin(true); // go back to login after register
+          setShowLogin(true);
         }}
         goToLogin={() => {
           setShowRegister(false);
@@ -174,78 +175,83 @@ function App() {
 
   if (!gameMode) {
     return (
-      <div className="mode-selection">
-        <MessageBox message={message} />
-        <h1 className="main-title">THE A1B1 GAME</h1>
+      <>
+        {!loadingDone && (
+          <Loading apiUrl={API} onDone={() => setLoadingDone(true)} />
+        )}
+        <div className="mode-selection">
+          <MessageBox message={message} />
+          <h1 className="main-title">THE A1B1 GAME</h1>
 
-        {/* Daily Challenge - Left Panel */}
-        <div
-          className={`mode-panel left ${dailyPlayed ? "disabled" : ""}`}
-          onClick={() => {
-            if (!loggedIn) {
-              showMessage("Login Required");
-              return;
-            }
-            if (!dailyPlayed) {
-              handleModeSelect("daily");
-            }
-          }}
-        >
-          <div className="mode-content">
-            <p className="mode-title">Ranked</p>
-            <button className="mode-button-daily" disabled={dailyPlayed}>
-              DAILY CHALLENGE
-            </button>
-            {dailyPlayed && (
-              <p className="daily-played-msg">Already played today</p>
-            )}
+          {/* Daily Challenge - Left Panel */}
+          <div
+            className={`mode-panel left ${dailyPlayed ? "disabled" : ""}`}
+            onClick={() => {
+              if (!loggedIn) {
+                showMessage("Login Required");
+                return;
+              }
+              if (!dailyPlayed) {
+                handleModeSelect("daily");
+              }
+            }}
+          >
+            <div className="mode-content">
+              <p className="mode-title">Ranked</p>
+              <button className="mode-button-daily" disabled={dailyPlayed}>
+                DAILY CHALLENGE
+              </button>
+              {dailyPlayed && (
+                <p className="daily-played-msg">Already played today</p>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="lightning-crack"></div>
+          <div className="lightning-crack"></div>
 
-        {/* Free Play - Right Panel */}
-        <div
-          className="mode-panel right"
-          onClick={() => handleModeSelect("random")}
-        >
-          <div className="mode-content">
-            <p className="mode-title">Practice</p>
-            <button className="mode-button">FREE PLAY</button>
+          {/* Free Play - Right Panel */}
+          <div
+            className="mode-panel right"
+            onClick={() => handleModeSelect("random")}
+          >
+            <div className="mode-content">
+              <p className="mode-title">Practice</p>
+              <button className="mode-button">FREE PLAY</button>
 
-            <div className="auth-buttons">
-              <button
-                className="auth-mode-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowLeaderboard(true);
-                }}
-              >
-                Leaderboard
-              </button>
+              <div className="auth-buttons">
+                <button
+                  className="auth-mode-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowLeaderboard(true);
+                  }}
+                >
+                  Leaderboard
+                </button>
 
-              <button
-                className={`logout-button ${
-                  loggedIn ? "logged-in" : "logged-out"
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
+                <button
+                  className={`logout-button ${
+                    loggedIn ? "logged-in" : "logged-out"
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
 
-                  if (loggedIn) {
-                    localStorage.removeItem("token");
-                    setLoggedIn(false);
-                    showMessage("Logged out");
-                  } else {
-                    setShowLogin(true);
-                  }
-                }}
-              >
-                {loggedIn ? "Logout" : "Login"}
-              </button>
+                    if (loggedIn) {
+                      localStorage.removeItem("token");
+                      setLoggedIn(false);
+                      showMessage("Logged out");
+                    } else {
+                      setShowLogin(true);
+                    }
+                  }}
+                >
+                  {loggedIn ? "Logout" : "Login"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
